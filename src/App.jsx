@@ -62,9 +62,7 @@ function App() {
       {tasks.map((task) => (
         <React.Fragment key={task.id}>
           <div
-            className={`bg-white rounded-lg shadow-lg justify-between items-center ml-auto mr-auto mt-2 ${
-              showMore === task.id ? "h-52" : ""
-            }`}
+            className={`bg-white rounded-lg shadow-lg justify-between items-center ml-auto mr-auto mt-2`}
             style={{ width: "600px" }}
           >
             <div className="px-6 py-4">
@@ -75,11 +73,7 @@ function App() {
                 <UilTrashAlt />
               </button>
               <h1
-                className={
-                  showMore === task.id
-                    ? "text-xl font-semibold text-gray-800 w-24"
-                    : "text-xl font-semibold text-gray-800 w-full truncate"
-                }
+                className={"text-xl font-semibold text-gray-800 w-full truncate"}
               >
                 {task.title}
               </h1>
