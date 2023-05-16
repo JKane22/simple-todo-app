@@ -47,6 +47,7 @@ function App() {
   return (
     <div className="App bg-gray-300 min-h-screen">
       {/* Create tasks */}
+      <div className="pt-5 bg-gray-300 w-full"></div>
       <div
         className="bg-white rounded-lg shadow-lg ml-auto mr-auto justify-between items-center"
         style={{ width: "600px" }}
