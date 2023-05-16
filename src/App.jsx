@@ -62,7 +62,7 @@ function App() {
         </div>
         <div className="px-6 py-4 self-end">
           <button
-            className="btn btn-success text-white w-40 rounded-md"
+            className={taskTitle == "" ? "btn btn-success text-white w-40 rounded-md btn-disabled opacity-30" : "btn btn-success text-white w-40 rounded-md"}
             onClick={createTask}
           >
             Create Task
