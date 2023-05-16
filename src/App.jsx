@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/App.css";
 
 import { UilTrashAlt } from "@iconscout/react-unicons";
@@ -16,21 +16,32 @@ function App() {
   };
 
   const createTask = () => {
+    // Save the task in the local storage
     if (taskTitle) {
-      setTasks([
-        ...tasks,
-        {
-          id: Math.floor(Math.random() * 1000),
-          title: taskTitle,
-          createdAt: new Date().toLocaleDateString(),
-        },
-      ]);
+      const newTask = {
+        id: Math.floor(Math.random() * 1000),
+        title: taskTitle,
+        date: new Date().toLocaleDateString(),
+      };
+
+      const updatedTasks = [...tasks, newTask];
+      setTasks(updatedTasks);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
       setTaskTitle("");
     }
   };
 
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
   const deleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setTasks(updatedTasks);
   };
 
   return (
@@ -73,7 +84,9 @@ function App() {
                 <UilTrashAlt />
               </button>
               <h1
-                className={"text-xl font-semibold text-gray-800 w-full truncate"}
+                className={
+                  "text-xl font-semibold text-gray-800 w-full truncate"
+                }
               >
                 {task.title}
               </h1>
