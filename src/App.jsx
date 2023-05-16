@@ -91,7 +91,7 @@ function App() {
                 {task.title}
               </h1>
               <h1 className="font-semibold text-gray-800 text-right">
-                Created: {DateCreated(task.createdAt)}
+                Created: {DateCreated(task.date)}
               </h1>
               <h1 className="text-xs text-gray-800 text-right">
                 Id: {task.id}
