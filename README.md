@@ -8,7 +8,7 @@ Through building this Todo list app, I learned how to use ReactJS and specifical
 - I plan on adding a Read more if the Text is too long
 
 ## App Deployment? 
-No Delpoyment of this app just yet!
+https://simple-todo-app-xi.vercel.app/
 
 ## Get Started!
 Clone the project into local
