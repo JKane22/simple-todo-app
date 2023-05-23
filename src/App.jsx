@@ -5,15 +5,8 @@ import { UilTrashAlt } from "@iconscout/react-unicons";
 
 function App() {
   const [taskTitle, setTaskTitle] = useState("");
+  const [taskDueDate, setTaskDueDate] = useState("");
   const [tasks, setTasks] = useState([]);
-
-  const DateCreated = (DateGiven) => {
-    if (DateGiven === new Date().toLocaleDateString()) {
-      return "Today";
-    } else {
-      return DateGiven;
-    }
-  };
 
   const createTask = () => {
     // Save the task in the local storage
@@ -21,14 +14,39 @@ function App() {
       const newTask = {
         id: Math.floor(Math.random() * 1000),
         title: taskTitle,
-        date: new Date().toLocaleDateString(),
+        date: taskDueDate,
       };
 
       const updatedTasks = [...tasks, newTask];
       setTasks(updatedTasks);
       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
       setTaskTitle("");
+      setTaskDueDate("");
     }
+  };
+
+  const CheckDate = (date) => {
+    const dateObj = new Date(date);
+
+    const currentDate = new Date();
+
+    dateObj.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (dateObj.getTime() === currentDate.getTime()) {
+      return "Today!";
+    } else if (dateObj.getTime() === currentDate.getTime() + 24 * 60 * 60 * 1000) {
+      return "Tomorrow!";
+    } else if (dateObj < currentDate) {
+      return "Overdue! (" + dateObj.toDateString() + ")";
+    } else if (
+      dateObj >= currentDate &&
+      dateObj <= new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)
+    ) {
+      return "This Week";
+    } else { 
+      return dateObj.toDateString();
+    };
   };
 
   useEffect(() => {
@@ -53,6 +71,7 @@ function App() {
         style={{ width: "600px" }}
       >
         <div className="px-6 py-4">
+          {/* Task title */}
           <h1 className="text-xl font-semibold text-gray-800">Title:</h1>
           <input
             placeholder="What do you wanna do?"
@@ -60,10 +79,23 @@ function App() {
             onChange={(e) => setTaskTitle(e.target.value)}
             value={taskTitle}
           />
+
+          {/* Due Date */}
+          <h1 className="text-xl font-semibold text-gray-800">Due Date:</h1>
+          <input
+            type="date"
+            className="border border-gray-400 rounded-md w-full px-3 py-2 mt-1 mb-4 text-black"
+            onChange={(e) => setTaskDueDate(e.target.value)}
+            value={taskDueDate}
+          />
         </div>
         <div className="px-6 py-4 self-end">
           <button
-            className={taskTitle == "" ? "btn btn-success text-white w-40 rounded-md btn-disabled opacity-30" : "btn btn-success text-white w-40 rounded-md"}
+            className={
+              taskTitle == "" || taskDueDate == ""
+                ? "btn btn-success text-white w-40 rounded-md btn-disabled opacity-30"
+                : "btn btn-success text-white w-40 rounded-md"
+            }
             onClick={createTask}
           >
             Create Task
@@ -91,8 +123,8 @@ function App() {
               >
                 {task.title}
               </h1>
-              <h1 className="font-semibold text-gray-800 text-right">
-                Created: {DateCreated(task.date)}
+              <h1 className={CheckDate(task.date).includes("Overdue!") ? "font-bold text-right text-red-500" : "font-semibold text-gray-800 text-right"}>
+                Due by: {CheckDate(task.date)}
               </h1>
               <h1 className="text-xs text-gray-800 text-right">
                 Id: {task.id}
