@@ -6,6 +6,7 @@ import { UilTrashAlt } from "@iconscout/react-unicons";
 function App() {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
+  const [taskSummary, setTaskSummary] = useState("");
   const [tasks, setTasks] = useState([]);
 
   const createTask = () => {
@@ -15,6 +16,7 @@ function App() {
         id: Math.floor(Math.random() * 1000),
         title: taskTitle,
         date: taskDueDate,
+        summary: taskSummary,
       };
 
       const updatedTasks = [...tasks, newTask];
@@ -22,7 +24,14 @@ function App() {
       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
       setTaskTitle("");
       setTaskDueDate("");
+      setTaskSummary("");
     }
+  };
+
+  const RandomTaskTitle = () => {
+    const title = ["Take the dog for a walk!", "What are you thinking?", "Call Dad about Food!", "Go to the gym!", "Get a haircut!"];
+
+    return title[Math.floor(Math.random() * title.length)];
   };
 
   const CheckDate = (date) => {
@@ -72,16 +81,25 @@ function App() {
       >
         <div className="px-6 py-4">
           {/* Task title */}
-          <h1 className="text-xl font-semibold text-gray-800">Title:</h1>
+          <h1 className="text-xl font-semibold text-gray-800">Title <span className="text-red-600">*</span></h1>
           <input
-            placeholder="What do you wanna do?"
+            placeholder={RandomTaskTitle()}
             className="border border-gray-400 rounded-md w-full px-3 py-2 mt-1 mb-4 text-black"
             onChange={(e) => setTaskTitle(e.target.value)}
             value={taskTitle}
           />
 
+          {/* Task Summary */}
+          <h1 className="text-xl font-semibold text-gray-800">Summary</h1>
+          <input
+            placeholder="Tell me a little bit about that task!"
+            className="border border-gray-400 rounded-md w-full px-3 py-2 mt-1 mb-4 text-black"
+            onChange={(e) => setTaskSummary(e.target.value)}
+            value={taskSummary}
+          />
+
           {/* Due Date */}
-          <h1 className="text-xl font-semibold text-gray-800">Due Date:</h1>
+          <h1 className="text-xl font-semibold text-gray-800">Due Date <span className="text-red-600">*</span></h1>
           <input
             type="date"
             className="border border-gray-400 rounded-md w-full px-3 py-2 mt-1 mb-4 text-black"
@@ -93,8 +111,8 @@ function App() {
           <button
             className={
               taskTitle == "" || taskDueDate == ""
-                ? "btn btn-success text-white w-40 rounded-md btn-disabled opacity-30"
-                : "btn btn-success text-white w-40 rounded-md"
+                ? "btn btn-success btn-block text-white rounded-md btn-disabled opacity-30"
+                : "btn btn-success btn-block text-white rounded-md"
             }
             onClick={createTask}
           >
@@ -102,6 +120,7 @@ function App() {
           </button>
         </div>
       </div>
+
       {/* Show tasks */}
       {tasks.map((task) => (
         <React.Fragment key={task.id}>
@@ -118,11 +137,14 @@ function App() {
               </button>
               <h1
                 className={
-                  "text-xl font-semibold text-gray-800 w-full truncate"
+                  "text-xl font-black text-gray-800 w-full truncate"
                 }
               >
                 {task.title}
               </h1>
+              {task.summary && (
+                <h1 className="font-semibold text-gray-800 pt-2">{task.summary}</h1>
+              )}
               <h1 className={CheckDate(task.date).includes("Overdue!") ? "font-bold text-right text-red-500" : "font-semibold text-gray-800 text-right"}>
                 Due by: {CheckDate(task.date)}
               </h1>
